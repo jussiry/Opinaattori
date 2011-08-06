@@ -1,0 +1,14 @@
+#page.insert_html :before, "opinions", "<li>testi</li>"
+
+unless @new_opinions.nil?
+  @new_opinions.each do |no_id|
+    page.insert_html :bottom, :opinions, {:partial => 'opinion/opinion', :locals => { :opinion_id => no_id }}
+  end
+  page.call 'add_opinion_anims'
+end
+
+if @opinions_left
+  page.call 'checkScroll'
+else
+  page.hide 'loading_text'
+end

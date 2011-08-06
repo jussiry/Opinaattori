@@ -1,0 +1,32 @@
+<div style="float:left;width:430px;">
+	<div style="overflow:auto;height:180px">
+		<h4>Palaute:</h4>
+		<% Feedback.all.reverse.each do |fb| %>
+			<div style="margin:10px 0;">
+				<% unless fb.user.nil? %>
+					<%= link_to fb.user.login, :controller => 'user', :action => 'show', :login => fb.user.login %>:
+				<% end %>
+				<%= fb.text %>
+				&nbsp;(<%= time_ago_text(fb.created_at) %> sitten)
+			</div>
+		<% end %>
+	</div>
+	<ul>
+		<% User.all.reverse[0..10].each do |u| %>
+	    <li><%= link_to "#{u.login}", :controller => 'user', :action => 'show', :login => u.login %>
+			<%= "(#{u.opinion_statuses.size}) - luotu #{time_ago_text(u.created_at)} sitten, päivitetty #{time_ago_text(u.updated_at)} sitten" %></li>
+		<% end %>
+	</ul>
+</div>
+
+<ul style="float:left;margin-left:30px;width:200px;">
+  <% last_user = nil %>
+	<% OpinionStatus.find(:all, :order => 'updated_at DESC')[0..150].each do |os| %>
+	  <% unless os.user == last_user %>
+	    <li><%= link_to "#{os.user.login}", :controller => 'user', :action => 'show', :login => os.user.login %>
+			<%= "(#{os.user.opinion_statuses.size}, #{time_ago_text(os.updated_at)}) sitten" %></li>
+			<% last_user = os.user %>
+		<% end %>
+	<% end %>
+</ul>
+    

@@ -1,0 +1,37 @@
+
+<!--div style="font-size:1.2em;font-weight:bold;">Kommentit</div-->
+<h4 onclick="$('.comments_content', $(this).parent()).toggle('slow')">Keskustelu</h4>
+
+<div class="comments_content">
+	<%= render :partial => 'comment/new_comment_form', :locals => {:opinion => opinion} %>
+	
+	<%
+		comments = opinion.comments.find(:all, :conditions => {:reply_id => nil}, :order => 'created_at DESC')
+		comments_final = comments.clone
+		move = 1
+		comments.each_with_index do |c, i|
+			if c.replies.size > 0
+				c.replies.each do |r|
+					comments_final.insert(i+move, r)
+					move += 1
+				end
+			end
+		end
+		new_bonus = (defined? new_com) ? 1 : 0
+		session[:read_com][opinion.id] = opinion.comments_count + new_bonus
+	%>
+	<!--Comment.find_by_opinion_id(:opinion_id => params[:opinion_id], , ) -->
+	<% reply_id = nil %>
+	<% comments_final.each_with_index do |c, i| %>
+	  <% reply_id = c.id if (c.replies.size > 0) or c.reply_to.nil? or reply_id.nil? %>
+		<% reply = ((c.reply_to.nil? and c.replies.size == 0) or i == (comments_final.size - 1) or comments_final[i+1].reply_to.nil?) %>
+		<%= render :partial => "comment/comment", :locals => {:comment => c, :reply => reply, :reply_id => reply_id } %>
+	<% end %>
+</div>
+
+<% if defined? new_com %>
+	<script type="text/javascript" charset="utf-8">
+		<!-- update action_log -->
+		<%= remote_function :update => "action_log", :url => { :controller => 'main_page', :action => 'action_log' } %>
+	</script>
+<% end %>

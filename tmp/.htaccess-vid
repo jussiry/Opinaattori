@@ -1,0 +1,5 @@
+RewriteEngine on
+rewritecond %{http_host} ^opinaattori.net [nc]
+rewriterule ^(.*)$ http://www.opinaattori.net/$1 [r=301,nc]
+RewriteCond %{HTTP_HOST} ^www.opinaattori.net$
+RewriteRule ^(.*)$ http://127.0.0.1:12001%{REQUEST_URI} [P,QSA,L]

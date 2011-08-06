@@ -1,0 +1,68 @@
+
+<% has_cor = false %>
+<% teaser = false if not defined? teaser %>
+<% pos_cor = Opinion.pos_correlations(opinion_id) %>
+<% unless teaser %>
+	<% neg_cor = Opinion.neg_correlations(opinion_id) %>
+<% end %>
+
+<h4 onclick="$('.corr_content', $(this).parent()).toggle('slow')">Korrelaatiot</h4>
+		
+<div class="corr_content">
+
+	<!--%= pos_cor.inspect %-->
+	
+	<% if pos_cor.size > 0 and pos_cor[0][1][1] > 5 %>
+		<% has_cor = true %>
+		<% unless teaser %>
+			<div style="margin:0.2em 0">Henkilöt jotka ovat <span style="color:green;font-weight:bold">samaa mieltä</span> yllä olevan väittämän kanssa, ajattelevat että:</div>
+		<% end %>
+		<% to = teaser ? 1 : 6 %>
+		<% pos_cor[0..to].each do |cor_array| %>
+		  <% next if cor_array[1][1] < 5 %>
+			<!--%= cor_array.inspect %-->
+			<!-- [ opinion, [plaa plaa] ] -->
+			<% per, diff, effect = correlation_vars(cor_array[1][0], cor_array[1][1], cor_array[1][2])%>
+			<!--% per = %-->
+			<div style="margin-left:12px">
+				<a href="/opinion/show/<%=cor_array[0].id%>" title="<%=per%>% samaa mieltä väittämästä. Vastauksia: <%=cor_array[1][1]%>">
+					<% color = diff < 0 ? 'red' : 'green' %>
+					<span style="color:<%=color%>"><%='+' if diff > 0 %><%= diff %>%</span> <!--  (#{effect}, #{cor_array[1][3]}) -->
+					<%= " - #{limit_text(cor_array[0].text_no_html,45)}" %></a>
+				
+				<!--%= link_to "<img src='/images/cor_icon.png' />", { :controller => 'opinion',
+										:action => 'corr_box', :id => opinion_id }, :target => "_blank", :class => "cor_box_link" %-->
+				
+			</div>
+		<% end %>
+		<%="<br/>" unless teaser %>
+	<% end %>
+	
+	<% unless teaser or neg_cor.size == 0 or neg_cor[0][1][1] < 5 %>
+		<% has_cor = true %>
+		<div style="margin:0.2em 0">Henkilöt jotka ovat <span style="color:red;font-weight:bold">erimieltä</span> yllä olevan väittämän kanssa, ajattelevat että:</div>
+		
+		<!-- [0..6] -->
+		<% neg_cor[0..6].each do |cor_array| %>
+		  <% next if cor_array[1][1] < 5 %>
+			<% per, diff, effect = correlation_vars(cor_array[1][0], cor_array[1][1], cor_array[1][2])%>
+			<div style="margin-left:15px">
+				<a href="/opinion/show/<%=cor_array[0].id%>" title="<%=per%>% samaa mieltä väittämästä. Vastauksia: <%=cor_array[1][1]%>">
+					<% color = diff < 0 ? 'red' : 'green' %>
+					<span style="color:<%=color%>"><%='+' if diff > 0 %><%= diff %>%</span>
+					<%= " - #{limit_text(cor_array[0].text_no_html,45)}" %>
+				</a>
+			</div>
+		<% end %>
+		<br/>
+	<% end %>
+	
+	<% unless has_cor %>
+		<div>Ei riittävästi vastauksia korrelaatioiden luomiseksi.</div>
+	<% end %>
+	
+	<% if teaser %>
+		(<%= link_to_remote 'lisää korrelaatioita', :update => "correlations_#{opinion_id}",
+				:url => {:controller => 'opinion', :action => 'correlations', :id => opinion_id} %>)
+	<% end %>
+</div>

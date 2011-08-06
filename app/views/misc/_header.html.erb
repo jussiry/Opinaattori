@@ -1,0 +1,26 @@
+
+<div style="<%='margin-top:30px' if params[:action] == 'main_page'%>">
+	<a href="/"><img src="/images/logo.png" /></a>
+</div>
+
+<div id="header" class="inset">	
+	<!--h1><%=link_to 'Opinaattori', :controller => :misc, :action => :main_page %></h1-->
+	<br />
+	<div>
+		<% if session[:user].nil? %>
+			<div id="login_link">
+		  	<%= link_to_remote 'Kirjaudu sisään', :update => :login, :url => '/login_form' %>
+			</div>
+		<% else %>
+			<h2><%= link_to session[:user].login_or_new, :controller => 'user', :action => 'show', :login => session[:user].login %></h2>
+			<div>
+				<span id="anonym_mode">
+					<%= render :partial => 'misc/anonym_mode' %>
+				</span>
+				<%= link_to 'asetukset', :controller => 'user', :action => 'settings', :login => session[:user].login %>,
+				<% confirm = 'Et ole tallentanut profiiliisi salasanaa! Mikäli kirjaudut nyt ulos et pääse enää takaisin profiiliisi (salasanan voi antaa "asetukset" sivulta). Haluatko varmasti kirjautua ulos?' if session[:user].password.blank? %>
+				<%= link_to 'pois!', '/logout', :confirm => confirm %>
+			</div>
+		<% end %>
+	</div>
+</div>

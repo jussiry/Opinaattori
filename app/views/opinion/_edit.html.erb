@@ -1,0 +1,27 @@
+
+<div style="font-size: 0.7em;">
+
+	<% form_tag :controller => 'opinion', :action => 'edit' do %>
+		<%= hidden_field_tag :id, :value => opinion.id %>
+		<%= text_area_tag :text, opinion.text, :cols => 48, :rows => 4 -%>
+		<%= submit_tag 'Lähetä', :style=>"float:right; margin: 1px 3px;" -%>
+	<% end %>
+	
+	<div><!--style="clear:both"-->
+		<% time = (opinion.created_at+30.minutes).strftime("%H:%M") %>
+		Editointi mahdollisuus sulkeutuu klo <%=time%>.
+	</div>
+	
+	<div style="margin:0.5em 0">
+		<div id="link_to_texting_help"><%= link_to_function 'Tekstin muotoilu', "$('#link_to_texting_help').hide();$('#texting_help').show();" %></div>
+		<div id="texting_help" style="display:none;">
+			<div>"Linkki":http://www.opinaattori.net/ → <a href="http://www.opinaattori.net/">Linkki</a></div>
+			<div>*Lihavoitu* &nbsp;&nbsp;&nbsp; → &nbsp;&nbsp; <strong>Lihavoitu</strong></div>
+			<div>_Kursivoitu_ &nbsp;&nbsp; → &nbsp;&nbsp; <em>Kursivoitu</em></div>
+		</div>
+	</div>
+	
+	<div style="margin:0.5em 0">
+		<%= link_to 'Poista mielipide >>', {:controller => 'opinion', :action => 'destroy', :id => opinion.id}, :confirm => 'Haluatko varmasti poistaa mielipiteen?' %>
+	</div>
+</div>

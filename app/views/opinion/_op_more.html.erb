@@ -1,0 +1,71 @@
+
+<div class="op_more_content" style="<%='opacity:0;filter:alpha(opacity=0);' unless defined? op_open and op_open %>">
+	
+	<div class="op_more_top_block" title="<%=@opinion.percentage_all%> vastaajista on samaa mieltä, <%=100-@opinion.percentage_all_num%>% eri mieltä.">
+		<h1 class="per_agree"><%= @opinion.percentage_all %></h1>
+		<div class="small_text">
+			<%= @opinion.answers %>
+			<%= @opinion.answers == 1 ? 'vastaus' : 'vastausta' %>
+		</div>
+	</div>
+	
+	<div class="op_more_top_block">
+		<!--div class="result_all_answeres_title">
+			&nbsp;Kaikki (<%= @opinion.answers %>)
+		</div-->
+		<%= chart(@opinion.pos, @opinion.neg) %>
+		<div class="positive_answers small_text">
+			<img src="/images/answer_v_small.png" style="position:relative;bottom:2px" /><br />
+			<%= @opinion.pos %><br />
+			<!--span class="per_agree"><!--%= @opinion.percentage_all %--></span-->
+		</div>
+		<div class="negative_answers small_text">
+			<img src="/images/answer_x_small.png" style="position:relative;bottom:2px" /><br />
+			<%= @opinion.neg %><br />
+			<!--%= @opinion.percentage_neg_all %-->
+		</div>
+	</div>
+	
+	<div style="clear:both;"></div>
+	
+	
+	<div id="tags_<%=@opinion.id%>" class="tags">
+		<%= render :partial => "/opinion/tags" %>
+	</div>
+	
+	<% if @opinion.pos > 10 %>
+		<div id="correlations_<%=@opinion.id%>" class="correlations" style="margin-bottom:1em">
+			<%= render :partial => '/opinion/correlations', :locals => { :opinion_id => @opinion.id, :teaser => true } %>
+		</div>
+	<% elsif @opinion.neg > 10 %>
+		<div class="correlations" style="margin-bottom:0.2em">
+			<%= link_to_remote 'Näytä korrelaatiot', :update => "correlations",
+						:url => {:controller => 'opinion', :action => 'correlations', :id => @opinion.id} %>
+		</div>
+	<% end %>
+		
+	<div id="comments_<%=@opinion.id%>" class="comments">
+		<%= render :partial => '/comment/comments', :locals => { :opinion => @opinion } %>
+	</div>
+	
+	<div id="share_links" style="clear: both;text-align:center;">
+		<script>function fbs_click() {u='http://www.opinaattori.net/opinion/show/<%=@opinion.id%>';window.open('http://www.facebook.com/sharer.php?u='+encodeURIComponent(u),'sharer','toolbar=1,status=1,width=626,height=436');return false;}</script><a href="http://www.facebook.com/share.php?u=<url>" onclick="return fbs_click()" target="_blank">Lähetä tämä mielipide Facebook-kavereillesi!</a>
+	</div>
+
+</div>
+
+<script type="text/javascript" charset="utf-8">
+	<% if defined? os_changed %>
+		<%= remote_function :update => "action_log", :url => { :controller => 'main_page', :action => 'action_log' } %>
+	<% end %>
+	<% if session[:new_user] %>
+		<% if session[:new_user] == 1 %>
+			<%= remote_function :update => "user_menu", :url => { :controller => 'main_page', :action => 'user_menu' } %>
+		<% end %>
+		<% if session[:new_user] == 5 %>
+			$('#pop_up_bg').show();
+			$('#pop_up').show();
+			<% session[:new_user] = nil %>
+		<% end %>
+	<% end %>
+</script>

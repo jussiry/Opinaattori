@@ -1,0 +1,100 @@
+
+<% logger.debug "rendering opinion partial" %>
+
+<%
+if opinion.nil? and not opinion_id.nil?
+	begin
+		opinion = Opinion.find(opinion_id)
+	rescue
+		return
+	end
+elsif opinion.nil?
+	return
+end
+
+logger.debug "passed nil test"
+
+os = session[:user] ? OpinionStatus.find(:first, :conditions => {:user_id => session[:user].id, :opinion_id => opinion.id}) : nil 
+
+show_always = false unless defined? show_always # jos /opinion/show/tän_id
+return if os and os.status == 3 and !show_always
+
+op_open = (defined? op_open and op_open)
+
+answered = (!os.nil? and (os.status == 1 or os.status == 2))
+return if answered and session[:show][:all] and params[:controller] == 'main_page'
+%>
+
+<!-- onclick=\"location.href='http://www.example.com';\" -->
+<div id='opinion_<%=opinion.id%>' class='opinion'>
+	<div class="op_basic">
+		<div class="top_row">
+		  <!-- :update => "opinion_#{opinion.id}", :position => :after, -->
+			<!-- ,  :success => visual_effect(:appear, "opinion_#{opinion.id}", :duration => 0.4) -->
+			<a href="/opinion/show/<%=opinion.id%>" title="Siirry mielipiteen omalle sivulle.">
+				<%= days_ago(opinion.created_at) %>
+				&nbsp;
+				<% if opinion.answers > 0 %>
+					&nbsp;<img src="/images/answers_incon.png" class="answers_icon" /> <%= opinion.answers %>
+				<% end %>
+				<% if opinion.hidden > 0 %>
+					&nbsp;<img src="/images/x_small.png" class="answers_icon" /> <%= opinion.hidden %>&nbsp;
+				<% end %>
+				<% if opinion.comments_count > 0 %>
+					&nbsp;<img class="comment_img" src="/images/comment_icon.png" />
+					<%= opinion.comments_count %>
+				<% end %> &nbsp;&nbsp;
+				<% opinion.cached_tags[0..1].each do |t| %>
+					&nbsp;<%= t[0].name %>
+				<% end %>
+				<!--
+				lisää tähän tägejä
+				-->
+			</a>
+		</div>
+		
+		<!-- user -->
+		<% unless opinion.anonymous %>
+			<div class="opinion_creator">
+				<% img_src = opinion.creator.op_picture_id.nil? ? "/images/dummy.jpg" : "/misc/picture/#{opinion.creator.op_picture_id}" %>
+				<%= link_to "<img src=\"#{img_src}\" />", :controller => 'user', :action => 'show', :login => opinion.creator.login %>
+				<div class="name">
+					<%= link_to opinion.creator.login_or_new, :controller => 'user', :action => 'show', :login => opinion.creator.login %>
+				</div>
+			</div>
+		<% end %>
+		
+		<div class="opinion_text_container" style="<%='margin-left:20px;width:410px;' if opinion.anonymous %>" title="Näytä/piilota tarkemmat tiedot klikkaamalla."
+					onclick="if ($('#op_more_<%=opinion.id%>').html()=='') { preOpenOpinion(<%=opinion.id%>);<%= remote_function :update => "op_more_#{opinion.id}", :url => { :controller => 'opinion',
+												:action => 'op_more', :op_id => opinion.id }, :complete => "adjustOpinionHeight(#{opinion.id})" %> }
+									else toggleOpinionMore(<%=opinion.id%>);">
+			<div class="opinion_text" style="<%= 'text-align:center' if opinion.text.length < 35 %>">
+				<%= Markup.html(opinion.text, false) %>
+			</div>
+		</div>
+			
+		<%= render :partial => '/opinion/op_actions', :locals => {:opinion => opinion, :os => os } %>
+		
+		<div style="clear:both;"></div>
+	</div>
+	
+	
+	<% if op_open %>
+		<div id="op_more_<%=opinion.id%>" class="op_more" style="display:block;">
+		  <% @opinion = opinion %>
+			<%= render :partial => 'opinion/op_more', :locals => {:op_open => op_open} %>
+		</div>
+		
+		<script type="text/javascript" charset="utf-8">
+			<!-- Update user menu (new_user might have been created): -->
+			<%= remote_function :update => "user_menu", :url => { :controller => 'main_page', :action => 'user_menu' } %>
+			<!-- Update action log (ei tehä jos mielipiteen omalla sivulla): -->
+			<% unless show_always %>
+				<%= remote_function :update => "action_log", :url => { :controller => 'main_page', :action => 'action_log' } %>
+			<% end %>
+		</script>
+	<% else %>
+		<div id="op_more_<%=opinion.id%>" class="op_more"></div>
+	<% end %>
+			
+</div>

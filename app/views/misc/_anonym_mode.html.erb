@@ -1,0 +1,7 @@
+<% if session[:anonymous] %>
+	<strong><%= link_to_remote 'anonyymi', :update => 'anonym_mode', :url => { :controller => :misc, :action => :anonym_mode },
+			:html => { :title => "Tila: Anonyymi. Muuta julkiseksi klikkaamalla tästä.", :id => "anonym_link_red" } %></strong>
+<% else %>
+	<strong><%= link_to_remote 'julkinen', :update => 'anonym_mode', :url => { :controller => :misc, :action => :anonym_mode },
+				:html => { :title => "Tila: Julkinen. Muuta anonyymiksi klikkaamalla tästä.", :id => "anonym_link_green" } %></strong>
+<% end %>

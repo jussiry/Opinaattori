@@ -1,0 +1,8 @@
+<div>
+	<% tags, most_tags, least_tags = Tag.top_tags_alph %>
+	<% tags.each do |tt| %>
+		<% size = 8 + 12*( 1.0 * (tt[1].size - least_tags) / (most_tags-least_tags) )**0.4 %>
+		<span class="tag" style="font-size:<%=size.to_s << 'px'%>"><%= link_to format_tag_name(tt[0]), {:controller => 'main_page', :action => 'opinions_by_tag', :tag => tt[0]},
+			 :title => "#{tt[1].size} mielipidettä tagilla \"#{tt[0]}\"" %></span>&nbsp;&nbsp;
+	<% end %>
+</div>

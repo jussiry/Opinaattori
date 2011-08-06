@@ -1,0 +1,79 @@
+<%
+@created_op = @user.opinions # Opinion.find_all_by_creator_id(@user.id)
+@comments = @user.comments
+
+@created_op.delete_if { |o| o.anonymous? }
+@created_op.sort! {|a,b| b.created_at <=> a.created_at }
+@comments.delete_if { |c| c.anonymous? }
+@comments.sort! {|a,b| b.created_at <=> a.created_at }
+
+if params[:show].nil? and @created_op.size > 0
+	params[:show] = 'created'
+elsif params[:show].nil? and @comments.size > 0
+	params[:show] = 'comments'
+end
+%>
+
+<% last_date = "" %>
+
+<% if params[:show] == 'created' %>
+	<div>
+		<span class="showing_this">Mielipiteet</span>
+		<span class="other_option">
+			<%= link_to_remote "Näytä kommentit (#{@comments.size})", :update => "activity_log",
+						 			:url => { :action => "activity_log", :show => "comments" } %>
+		</span>
+	</div>
+	
+	<% @created_op.each do |op| %>
+		<%
+			if op.created_at.to_s[0..9] != last_date
+				date = days_ago(op.created_at) #.strftime("%d.%m.%Y")
+				last_date = op.created_at.to_s[0..9]
+			end
+		%>
+		<% if date %>
+			<div class="log_date"><%= date %>:</div>
+		<% end %>
+		
+		<%= render :partial => '/opinion/opinion', :locals => { :opinion => op } %>
+		
+	<% end %>
+	
+	
+	
+<% elsif params[:show] == 'comments' %>
+	<!-- COMMENTS: -->
+	<div>
+		<span class="showing_this">Kommentit</span>
+		<span class="other_option">
+			<%= link_to_remote "Näytä mielipiteet (#{@created_op.size})", :update => "activity_log",
+						 			:url => { :action => "activity_log", :show => "created" } %>
+		</span>
+	</div>
+	
+	<% @comments.each do |c| %>
+		<%
+			if c.created_at.to_s[0..9] != last_date
+				date = days_ago(c.created_at) #.strftime("%d.%m.%Y")
+				last_date = c.created_at.to_s[0..9]
+			end
+		%>
+		<% if date %>
+			<div class="log_date"><%= date %>:</div>
+		<% end %>
+		
+		<% op = c.opinion %>
+		<div class="op_box round10" onclick="location.href='/opinion/show/<%=op.id%>';">
+			<div class="op_text">
+				<%= Markup.html(op.text) %>
+			</div>
+			<div class="comments">
+				<%= render :partial => '/comment/comment', :locals => { :comment => c, :reply => false } %>
+			</div>
+		</div>
+	<% end %>
+	
+<% else %>
+	<div style="font-weight:bold;">Käyttäjä ei ole luonut (julkisia) mieilipiteitä tai kommentteja.</div>
+<% end %>

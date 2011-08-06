@@ -1,0 +1,872 @@
+/* Design helpers
+------------------------------------*/
+div {
+  /* outline: pink solid 1px; */
+}
+div div div{
+  /* outline: #ddd dotted 1px; */
+}
+
+body {
+	background: #fff url(/images/background_big_dark.gif) fixed repeat 0 0;
+	zbackground: #fff url(/images/grid.png) scroll repeat 0 0;
+}
+
+/*
+.whiter_background {
+	background: url(/images/background-transparency.png) scroll repeat 0 0;
+}*/
+
+/* Resets
+------------------------------------*/
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+img { border: 0 none; } 
+
+
+/* Typography
+------------------------------------*/
+body {
+	color: #555;
+	/*background-color: #fffffa; /*#fafaea;*/
+	/*font-family: Verdana,sans-serif;*/
+	font-family:"Lucida Grande",Lucida,Verdana,sans-serif;
+  font-size: 14px;
+}
+p {
+  margin-bottom: 20px;
+}
+
+/*ul, ol {
+  margin-bottom: 20px;
+}*/
+
+* {
+  line-height: 20px;
+}
+
+input, textarea, option {
+	font-size: 0.8em;
+	line-height: 14px;
+}
+
+select {
+	font-size: 1em;
+}
+
+
+h2, h3, h4 {
+	/*color: #7cab16;*/
+	
+	/*color: #94a72b;*/
+	/*color: #7cab16;
+	color: #6d4218;*/
+}
+h3 {
+	font-size: 1.2em;
+}
+
+h4 {
+	font-weight: bold;
+}
+
+
+.small_text {
+	font-size:12px;
+	font-weight:normal;
+}
+
+.tiny_text {
+	font-size:10px;
+	font-weight:normal;
+	color: #aaa;
+}
+
+
+/* Link styles (and hovers)
+ * ------------------------------------ */
+
+a {
+	text-decoration: none;
+	color: #777;
+	/*color: #277;*/
+	/*color: #6d4218;*/
+}
+a:hover, #similar_users a:hover {
+	color: #fff;
+	background-color: #cacaca;
+}
+.opinion_big a:hover, .op_actions .link_to_op a:hover {
+ 	color: #ffa !important;
+	background-color: #C9996A; /*#6d4218;*/
+}
+.index_links a:hover {
+	background-color: #ddd;
+	padding-top: 4px;
+}
+#logo a:hover, .button_positive a:hover, .button_negative a:hover, .opinion a:hover {
+	background: none;
+}
+
+
+/* greens: */
+
+.green_links a { color: #7cab16; }
+.green_links a:hover { color: white; background-color: #7cab16; }
+
+.sidebar_info a, #bottom_bar a {
+	color: #7cab16;
+}
+.sidebar_info a:hover, #bottom_bar a:hover, #name a:hover {
+	color: white;
+	background-color: #7cab16;
+}
+
+
+/* Tables
+ * ---------------------------------*/
+td {
+	text-align: center;
+	padding: 1px;
+	border: 1px dotted gray;
+}
+th {
+	font-weight: normal;
+	padding: 0 4px;
+	text-align: left;
+}
+
+
+
+/* LAYOUT
+------------------------------------*/
+
+#wrapper {
+	position: relative;
+	width: 802px;
+  margin: 10px auto 5px auto;
+  min-height: 550px; /* väli aikanen. pitäs tehdä niin että javascptillä kopioi sidebarin korkeuden. tarvii jonkinlaisen event kuuntelijan? */
+	/*background: url(/images/background-transparency_66.png) scroll repeat 0 0;*/
+  /*background-color: #f5f;*/
+}
+
+#sidebar {
+	position: fixed;
+	width: 200px;
+	/*padding: 0 10px; margin-left: -200px !important; */
+	margin-left: 15px;
+}
+
+#right_side {
+	float: left;
+	/*margin: 2px 15px 0 240px;*/
+	position: relative;
+	top: 2px;
+	left: 240px;
+	width: 550px;
+}
+
+/* parent element must have position: relative/absolute; */
+.white_background { 
+	position: absolute;
+	z-index: -1;
+	background-color: #fff;
+	width: 100%;
+	height: 100%;
+	right: 0;
+	opacity: 0.75;
+	filter:alpha(opacity=75);
+	border: solid 1px #ddd;
+}
+
+
+/* MISC
+--------------------------------------------------- */
+
+#pop_up_bg {
+	display: none;
+	position: fixed;
+	top: 0;
+	z-index: 100;
+	width: 100%;
+	height: 100%;
+	background-color: #000;
+	opacity: 0.2;
+	filter:alpha(opacity=20);
+}
+
+#pop_up {
+	display: none;
+	position: fixed;
+	top: 0;
+	z-index: 101;
+	margin: 22% 33%;
+	width: 480px;
+	padding: 2%;
+	background-color: #fff;
+}
+
+#move_up_link { text-align: center; font-weight: bold; }
+#move_up_link a { color: #7cab16; }
+#move_up_link a:hover {
+	color: white;
+	background-color: #7cab16;
+}
+
+/* SIDEBAR
+ * ----------------------------------  */
+
+
+#logo {
+	margin: 20px 0;
+}
+
+#user_menu {
+	margin-top: 7px;
+}
+#user_menu h2, #user_actions { text-align: center; }
+#user_actions { margin-top: 4px; }
+
+#comment_links, #action_log { margin: 16px 0; }
+#comment_links a, #action_log a { display: block; }
+
+#feedback { display: none; }
+
+#feedback_form {
+	min-height: 45px;
+	width: 195px;
+	color:gray;
+}
+
+#statistics {
+	margin-top: 3px;
+	font-size: 0.8em;
+	line-height: 14px;
+	color: #777;
+}
+
+
+
+/* Main page
+------------------------------------*/
+
+#browse {
+	background-color: #edffe0; /* e1ffe0 */
+	border: 1px solid #dff6cd; /* b7e1b8 */
+	margin: 12px 0;
+	padding: 10px;
+}
+
+#browse h3 {
+	display: inline;
+	margin-right: 18px;
+}
+
+#searchbar {
+	float: right;
+	margin-top: 3px;
+}
+
+#searchbar form, #serch_field {
+	float: left;
+}
+
+#search_field {
+	font-size: 16px;
+	width: 150px;
+}
+#search_button, #submit_feedback {
+  color: #777;
+	font-family:"Lucida Grande",Lucida,Verdana,serif,sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	position:relative;
+	bottom: 2px;
+}
+
+#browse .tag {
+	font-weight: bold;
+	font-size:12px;
+}
+
+#browse_current {
+	margin: 30px 0 20px 0;
+	color: #777;
+	text-align: center;
+	/*margin-left: 23px;*/
+}
+
+#browse_current h2, #browse_current h3 {
+	display: inline;
+	background-color: #edffe0;
+	padding: 8px 22px;
+	/*color: #10a3bd;*/
+}
+
+
+#new_opinion {
+	background-color: #fefec8;
+	border: 1px solid #dbba8f;
+	margin-bottom: 20px;
+	padding: 10px 0 10px 10px;
+}
+
+#new_opinion img {
+	float:left;
+	margin-right:10px;
+	border: 1px solid #c6c6c6;
+	opacity:0.8;
+	filter:alpha(opacity=80);
+}
+
+#new_opinion textarea {
+	float: left;
+	width: 345px;
+	font-size:16px;
+	height: 48px;
+	color: #aaa;
+	font-size: 16px;
+	/*font-weight:bold;
+	line-height:22px;
+	color:#7cab16;
+	text-align: center;
+	*/
+	/*width: 270px;  <- four blocks */
+}
+
+#submit_opinion {
+	float: left;
+	margin-left: 7px;
+	height: 52px;
+	width: 110px;
+	postion: relative;
+	bottom: 30px;
+	color: #999;
+	font-size: 18px;
+}
+
+#op_anonym_box {
+	display: none;
+	position: relative;
+	top: 4px;
+}
+
+/*
+#help_icon {
+	float:left;
+	position: relative;
+	top: 2px;
+	margin-left: 4px;
+	margin-right: 10px;
+}
+
+.index_links {
+	font-size: 0.9em;
+	position: relative;
+	bottom: 0;
+	color: #777;
+}
+.arrow {
+	position:relative;
+	top: 3px;
+	float:left;
+	width: 64px;
+	
+}
+.index_text {
+	float:left;
+	font-size: 10px;
+	font-weight: bold;
+	width: 88px; /* 64 + 2*12
+	text-align: center;
+}
+*/
+
+/* Notice
+ * -----------------------------------*/
+
+#notice, .notice { /* oletus arvosesti keltainen */
+	padding: 10px 12px;
+	border-width: 2px;
+	border-style: solid;
+	margin-bottom: 15px;
+}
+
+.notice_red {
+	border-color: #e00;
+	background-color: #f99;
+}
+
+.notice_yellow, .notice_ { /* if color not set; show as yellow (.notice_) */
+	border-color: #fe0;
+	background-color: #ff6;
+}
+
+.notice_green {
+	border-color: #0e0;
+	background-color: #6f6;
+}
+
+#new_user a {
+	font-weight: bold;
+}
+
+/* Log in
+ * ---------------------------------*/
+#user_input {
+	float: left;
+	width: 94px;
+	font-size: 12px;
+}
+#pass_input {
+	float: left;
+	width: 85px;
+	margin-left: 15px;
+	font-size: 12px;
+}
+.input_box input {
+	width: 100%;
+}
+
+#login input[type=submit] {
+	margin: 5px 0 10px 118px;
+}
+
+.sidebar_info {
+	margin: 8px 0;
+	color: #777;
+}
+
+/* OPINION
+------------------------------------*/
+
+.opinion {
+	margin-bottom: 16px;
+	/*padding: 4px 8px 0 8px;*/
+	overflow: none;
+	color: #AE7C46;
+}
+
+.op_more a { color: #AE7C46; }
+
+.op_more a:hover {
+	color: #fff;
+	background-color: #dcbb98; /* AE7C46 */
+}
+
+
+.opinion h4 {
+	color: #6D4218;
+	cursor: pointer;
+	cursor: hand;
+}
+
+.op_basic {
+	position: relative;
+  background-color: #fefec8; /* #ffffb7 */
+	border: 1px solid #dbba8f;
+}
+
+/*
+.opinion:hover {
+	background: url(/images/opinion_bg_highlight.gif);
+}*/
+
+/*.opinion_bg {
+	position: absolute;
+	top: 2px;
+	left: 15px;
+	width: 350px;
+	opacity: 0;
+	filter:alpha(opacity=0);
+}*/
+
+.top_row {
+	height: 16px;
+	font-size: 11px;
+	font-family: sans-serif; /*"Lucida Grande",Lucida,Verdana,sans-serif;*/
+	overflow: visible;
+	position: relative;
+	bottom: 3px;
+	margin: 4px 10px;
+}
+.top_row a { color: #ae7c46; }
+.top_row a:hover { color: #6d4218; }
+
+.answers_icon { opacity: 0.6; filter:alpha(opacity=60); position:relative; top:1px;}
+
+.opinion_creator {
+	margin: 5px 10px 5px 0;
+	position: relative;
+	float: left;
+	width: 80px;
+	text-align: center;
+	font-size: 10px;
+	opacity:0.8;
+	filter:alpha(opacity=80);
+}
+.opinion_creator a { color: #472606; }
+
+.opinion_creator img {
+	border: 1px solid #bababa;	
+}
+.comment_img {
+	position:relative;
+	top:2px;
+	opacity:0.8;
+	filter:alpha(opacity=80);
+}
+
+.opinion_text_container {
+	position: relative;
+	margin-bottom: 10px;
+	width: 340px;
+	float: left;
+	opacity:0.7;
+	filter:alpha(opacity=70);
+}
+
+.opinion_text_container:hover {
+	cursor: pointer;
+	cursor: hand;
+}
+
+.opinion_text {
+	position: relative;
+	/*  määritelty html:ssä sen mukaan näytetäänkö resultteja */
+	overflow: hidden;
+	line-height: 22px;
+	display: table-cell;
+	vertical-align: middle;
+	font-family: Verdana,sans-serif;
+	font-size: 17px;
+	color: #4b2500; /*6d4218;*/
+	height: 64px;
+}
+/*
+.small_op_text a {
+	font-family: Verdana, sans-serif;
+	color: #6d4218;
+}
+
+.onclick_link:hover {
+	cursor: pointer;
+	cursor: hand;
+}*/
+
+.opinion_text a,  #opinion_text a {
+	color: #c9996a;
+	text-decoration: underline;
+}
+
+
+/* op_actions
+ * ------------------------------ */
+
+.op_actions {
+	float: left;
+	margin-top: 10px;
+	width: 96px;
+	margin: auto 10px;
+	overflow: hidden;
+	text-align: center;
+}
+
+.os_given, .no_os {
+	width: 96px;
+	height: 61px;
+	top: 10;
+	position: absolute;
+}
+
+.button_positive, .button_negative {
+	float: left;
+	width: 48px;
+}
+.remove {
+	width: 96px;
+	clear: both;
+	text-align: center;
+	padding-top: 8px;
+}
+/*
+.button_positive img, .button_negative img {
+	border: solid 2px #ffa;
+	padding: 1px;
+}*/
+
+.transparent {
+	opacity: 0.5;
+	filter:alpha(opacity=50);
+}
+
+.anonymous_button img {
+	border: dotted 2px #ffb78b;
+}/*
+.public_button {
+	margin: 3px;
+}*/
+
+
+/* OP_MORE
+--------------------------------------*/
+
+.op_more {
+	display: none;
+	position: relative;
+	bottom: 2px;
+	z-index: 4;
+	width: 87%;
+	padding: 10px;
+	margin-left: 4%;
+	background: #ffffe1 url(/images/op_more_bg.gif) repeat-x; /* vaal kel:ffc sin: edf6ff  pun:ffeed9 */
+	/*fefec8*/
+	border-left: 1px solid #dbba8f;
+  border-bottom: 1px solid #dbba8f;
+  border-right: 1px solid #dbba8f;
+}
+
+.op_more_top_block {
+	margin-left: 20%;
+	float: left;
+	text-align: center;
+	font-size: 13px;
+	font-weight: bold;
+	margin-top: 5px;
+}
+
+.per_agree {
+	font-weight: normal;
+	color: #7bd721; /* 4e4 */
+	margin: 26px 0 5px;
+}
+
+.chart_img { 
+	orientation: -90deg; /* EI TUETTU? */
+}
+
+.positive_answers, .negative_answers {
+	height: 0;
+	position: relative;
+	bottom: 55px;
+}
+.positive_answers {
+	right:51px;
+}
+.negative_answers {
+	left:51px;
+}
+
+.result_peers_title {
+	margin-top:17px;
+	margin-bottom:6px;
+}
+
+
+.tags {
+	/*font-size:12px;
+	font-family:"Lucida Grande",Lucida,Verdana,sans-serif;
+	color: #ae7c46;*/
+	margin: 10px 0;
+}
+
+/* CORRELATIONS
+---------------------*/
+
+.cor_box_link {
+	position: relative;
+	top: 1px;
+	opacity: 0.5;
+	filter:alpha(opacity=50);
+}
+.cor_box_link:hover { 
+	background-color: transparent !important;
+	opacity: 1;
+	filter:alpha(opacity=100);
+}
+
+
+/* COMMENTS
+ * ----------------------------------------*/
+
+.comment {
+	overflow: none;
+	margin: 13px 0;
+	padding: 0 0.6em 0.6em 0.6em;
+	color: #777;
+	/*background-color: #ffffdd;
+	border: solid #fffeac 2px;*/
+	background-color: #eeffca;
+	border: solid #d7ff82 1px;
+}
+
+.comments a, .comment_name {
+	color: #7cab16;
+}
+.comment_text a {
+	text-decoration: underline;
+}
+.comment_name {
+	margin: 8px 3px 0 0;
+	float: left;
+}
+
+.comment_name a {
+	text-decoration: none;
+}
+.comments a:hover {
+	background-color: #7cab16;
+	color: #eeffca;
+}
+.comment p {
+	margin-top: 0.6em;
+	margin-bottom: 0;
+}
+
+.comment_bottom_row {
+	text-align: right;
+	margin-right: 12px;
+	font-size: 11px;
+	margin-bottom: -3px;
+}
+
+.reply {
+	margin-left: 20px;
+}
+.reply_text {
+	position: relative;
+	bottom: 5px;
+}
+
+.new_comment {
+	margin: 7px 0;
+}
+
+
+.new_comment textarea {
+	float: left;
+	height: 42px;
+	min-height: 42px;
+	width: 75%;
+}
+.new_comment input[type=submit] {
+	height: 46px;
+	padding: 0 10px;
+	margin-left: 5px;
+	font-size: 1.3em;
+	color: #777;
+}
+
+.anonym_comment {
+	display:none;
+	clear: both;
+	position: relative;
+	top: 4px;
+	left: 4px;
+}
+
+/* Users
+ * --------------------------------------- */
+
+#user_box {
+	/*background-color: #fff6e0;
+	border: 1px solid #eddebb; pun */
+	/*background-color: #eafff9;
+	border: 1px solid #d1f3e9; sin */
+	
+  background-color: #f7fed3;
+	border: 1px solid #d6e1a2;
+	
+	padding: 15px;
+}
+
+.usr_inside_box {
+	float: left;
+	margin: 0 1%;
+	width: 46%;
+}
+
+#user_info { text-align: center; font-weight: bold; }
+
+#user_info img {
+	border: 1px solid #c6c6c6;
+}
+
+#name {
+	margin-top: 0.5em;
+	font-size: 1.3em;
+	font-weight: bold;
+}
+#name a {
+	/*color: #66f;*/
+	color: #7cab16; /*#6d4218;*/
+}
+
+#user_url a { color:#7cab16; font-size: 10px; }
+
+
+#similar_users { width: 48% }
+
+#similar_users img {
+	position:relative;
+	top:4px;
+}
+
+#similar_users li {
+	list-style: none;
+}
+
+
+/* Activity log
+---------------------------------- */
+
+#activity_log {
+	margin: 30px 0;
+}
+
+#activity_log .showing_this { font-size: 22px; font-weight: bold; }
+#activity_log .other_option { margin-left: 20px; font-weight: bold; }
+
+.log_date {
+	margin: 15px 8px;
+	font-size:0.9em;
+	font-weight:bold;
+}
+
+#activity_log .op_box {
+	margin: 15px 0;
+	cursor: pointer;
+	cursor: hand;
+  background-color: #fefec8;
+	border: 1px solid #dbba8f;
+}
+#activity_log .op_text {
+	margin: 15px;
+	color: #ae7c46;
+}
+#activity_log .comment { margin: 15px; }
+
+
+.gray_links a {
+	color: #777;
+}
+
+/* Settings
+ * ----------------------------------- */
+
+#settings {
+	background-color: #eafff9;
+	border: 1px solid #d1f3e9;
+	font-family: sans-serif;
+	padding: 10px;
+}
+
+#settings span { position: absolute; }
+#settings input, #settings select {
+	margin: 0 145px 3px;
+	
+}

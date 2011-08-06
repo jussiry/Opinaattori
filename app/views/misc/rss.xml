@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<atom:link href="http://www.vidious.net/<%= params[:controller] + '/' + params[:action] %>" rel="self" type="application/rss+xml" />
+		<title><%= @rss_title %></title>
+		<link>http://www.opinaattori.net</link>
+    <description></description>
+    <language>fi</language>
+		<pubDate><%= Date.today %></pubDate>
+    <lastBuildDate><%= Date.today %></lastBuildDate>
+    <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+    <% for item in @items %>
+			<item>
+        <title><![CDATA[<%= item.creator.login_or_new+":" unless item.anonymous %> <%= limit_text(item.text, 70) %>]]></title>
+        <link>http://www.opinaattori.net/opinion/show/<%= item.id %></link>
+        <description><![CDATA[
+					<p><%= item.text %></p>
+					<p>
+						<% if item.answers > 0 %>
+							<%= item.answers %>
+							<%= item.answers == 1 ? "vastaus" : "vastausta" %>
+						<% end %>
+						<% if item.comments_count > 0 %>
+							&nbsp;<%= item.comments_count %>
+							<%= item.comments_count == 1 ? "kommentti" : "kommenttia" %>
+						<% end %>
+					</p>
+					<% if item.comments_count > 0 %>
+						<h3>Kommentit:</h3>
+						<% item.comments.reverse.each do |c| %>
+							<p>
+								<%= c.user.login_or_new+":" unless c.anonymous %> <%= Markup.html(c.text) %>
+							</p>
+						<% end %>
+					<% end %>
+				]]></description>
+        <pubDate><%= item.created_at.rfc822 %></pubDate>
+        <guid>http://www.opinaattori.net/opinion/show/<%= item.id %></guid>
+      </item>
+  	<% end %>
+  </channel>
+</rss>

@@ -1,0 +1,13 @@
+
+<% form_tag :controller => 'user', :action => 'login' do %>
+	<div id="user_input" class="input_box">
+		<div>Käyttäjätunnus:</div>
+		<%= text_field :user, :login -%>
+	</div>
+	<div id="pass_input" class="input_box">
+		<div>Salasana:</div>
+		<%= password_field :user, :password %>
+	</div>
+	<div style="clear:both;"></div>
+	<%= submit_tag 'Loggaa sisään' %>
+<% end %>

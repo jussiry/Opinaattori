@@ -1,0 +1,50 @@
+
+<div id="act_<%=opinion.id%>" class="op_actions" os_status="<%= os.nil? ? -1 : os.status %>">
+	<% titles = opinion.text[-1..-1] == '?' ? ['Kyllä.', 'Ei.'] : ["Olen samaa mieltä.", "Olen eri mieltä."] %>
+	
+	
+	<div class="os_given" style="<%= 'display: none' if os.nil? %>">
+		<%
+			if os.nil?
+				img = "<img />"
+			elsif os.status == 1
+				img = "<img src='/images/answer_v_big.gif' />"
+			elsif os.status == 2
+				img = "<img src='/images/answer_x_big.gif' />"
+			elsif os.status == 3
+				img = "<img src='/images/remove_big.gif' />"
+			end
+		%>
+		<%= link_to_remote img, :update => "op_more_#{opinion.id}",
+					:url => { :controller => "opinion_status", :action => "modify_opinion", :opinion_id => opinion.id },
+					:html => {:title => "Peruuta vastaus" } %>
+	</div>
+	
+	<div class="no_os" style="display: <%= 'none' unless os.nil? %>">
+		<%# transparent = (!os or (os and os.status!=1)) %>
+		<%# anonym_border=false; anonym_border = (os and os.anonymous and !transparent)  %>
+		<div class="button_positive">
+			<%= link_to_remote "<img src='/images/answer_v.gif' />", :update => "op_more_#{opinion.id}",
+						:url => {:controller => "opinion_status", :action => "modify_opinion", :status => 1, :opinion_id => opinion.id },
+						:html => {:title => titles[0], :class=>"transparent", :onclick => "preOpenOpinion(#{opinion.id})" },
+						:complete => "adjustOpinionHeight(#{opinion.id})" %>
+		</div>
+		<%# transparent = (!os or (os and os.status!=2)) %>
+		<%# anonym_border=false; anonym_border = (os and os.anonymous and !transparent)  %>
+		<div class="button_negative">
+			<%= link_to_remote "<img src='/images/answer_x.gif' />", :update => "op_more_#{opinion.id}",
+						:url => {:controller => 'opinion_status', :action => 'modify_opinion', :status => 2, :opinion_id => opinion.id },
+						:html => {:title => titles[1], :class=>"transparent", :onclick => "preOpenOpinion(#{opinion.id})" },
+						:complete => "adjustOpinionHeight(#{opinion.id})" %>
+		</div>
+		<% unless opinion.creator == session[:user] %>
+			<div class="remove">
+				<%= link_to_remote "<img src='/images/x_big.gif' class='transparent' />",
+						:url => {:controller => 'opinion_status', :action => 'hide', :opinion_id => opinion.id},
+						:html => { :title => 'Piilota mielipide jatkossa.' } %>
+				 <!-- :BlindUp -->
+			</div>
+		<% end %>
+	</div>
+	
+</div>

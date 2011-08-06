@@ -1,0 +1,63 @@
+
+<%= notice %>
+	
+<div id="settings" class="round20">
+	<% form_for :user, session[:user], :url => { :action => "settings" }, :html => { :multipart => true } do |u| %>
+		<div>
+			<h2 style="margin:8px 0">Asetukset</h2>
+			<div>
+				<% if session[:user].password.blank? %>
+					<p><strong style="color:red">Huom!</strong> Sinulla ei ole salasanaa ja näin ollen olet vaarassa menettää profiilisi (mikäli esim. vaihdat selainta). On hyvin suositeltavaa että luot itsellesi salasanan ja henkilökohtaisen käyttäjätunnuksen.</p>
+				<% end %>
+				
+				<div><strong>Yleiset:</strong></div>
+				<div><span>Käyttäjätunnus:</span>
+					<% login_given = session[:user].login =~ /[a-z]/ %>
+					<% login = login_given ? session[:user].login : "" %>
+					<% style = login_given ? "" : "background-color:#ff6" %>
+					<%= text_field_tag "new_login", login, :size => 20, :style => style -%>
+					<!--%= u.text_field :login, :size => 20 -%-->
+				</div>
+				<div>
+					<% if session[:user].password.blank? %>
+						<span>Salasana:</span>
+					<% else %>
+						<span>Uusi salasana:</span>
+					<% end %>
+					<% style = session[:user].password.blank? ? "background-color:#ff6" : "" %>
+					<%= password_field_tag :password, "", :style => style -%>
+				</div>
+				<div><span>Salasana uudestaan:</span> <%= password_field_tag :password2, "", :style => style -%></div>
+				<div><span>Email:</span> <%= u.text_field :email, :style => "margin-left:95px;" %></div>
+				<br />
+			</div>
+		</div>
+		<div>
+			<div><strong>Profiiliin:</strong></div>
+			<div><span>Sukupuoli:</span> <%= select_tag 'sex', "<option value='#{session[:user].sex}'>#{sex(session[:user].sex).capitalize unless session[:user].sex.nil?}</option><option value='1'>Mies</option><option value='2'>Nainen</option><option value=''>Piilota</option>", :style => "width:80px" -%></div>
+			<%
+				vuodet = "<option>#{session[:user].birthdate.nil? ? '' : session[:user].birthdate.to_s[0..3]}</option>"
+				95.times do |i|
+					vuodet += "<option>#{2005-i}</option>"
+				end
+			%>
+			<div><span>Syntymävuosi:</span> <%= select_tag 'birth_year', vuodet, :style => "width:80px" -%></div>
+			<div><span style="<%='font-weight:bold;color:red;' if params[:pic] %>">Kuva:</span> <%= file_field_tag "uploaded_picture" %></div>
+			<div><span>Oma nimi:</span> <%= u.text_field :name, :style => "width:182px" -%></div>
+			<div><span>Kotisivun osoite (url):</span> <%= u.text_field :url, :style => "width:260px" -%></div>
+			<%= submit_tag 'Tallenna asetukset', :style=>"font-size:1.2em;margin:0.8em 1em 0.3em;float:right;" -%>
+		</div>
+	<% end %>
+	<div style="clear:both;"></div>
+</div>
+
+<div style="margin: 30px 0;">
+	<h3 style="margin-bottom:10px">En ole <%= session[:user].login_or_new %></h3>
+	<div class="inset">
+		<p>Mikäli teit tämän profiilin vahingossa voit siirtää "<%= session[:user].login_or_new %>":n luomasi mielipiteet ja kommentit oikeaan profiiliisi loggautumalla sen tunnuksilla tästä:</p>
+		<div id="login">
+			<%= render :partial => 'user/login' %>
+		</div>
+	</div>
+	<div style="clear:both;"></div>
+</div>

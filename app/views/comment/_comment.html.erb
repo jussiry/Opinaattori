@@ -1,0 +1,27 @@
+
+
+<div id="comment_<%=comment.id%>" class="comment round10 <%= "reply" unless comment.reply_to.nil? %>">
+	
+	<% name = comment.anonymous ? 'anonyymi' : link_to_user(comment.user) %>
+	<div class='comment_name'><%= name %>: </div>
+	<div class="comment_text">
+		<%= Markup.html(comment.text) %>
+	</div>
+	
+	<!-- name_html + -->
+	
+	<div class="comment_bottom_row">
+		<span style="color:#aaa;"><%= time_ago_text(comment.created_at) %> sitten</span>
+		<% if reply and comment.reply_to.nil? %>
+			&nbsp;&nbsp;<span><%= link_to_remote "(vastaa)", :update => "new_comment_#{comment.id}",
+					:url => {:controller => "comment", :action => "new_comment_form", :reply_to_id => reply_id } %></span>
+		<% end %>
+	</div>
+	<div id="new_comment_<%=comment.id%>"></div>
+</div>
+<% if reply and !comment.reply_to.nil? %>
+	<div id="reply_text_<%=comment.id%>" class="reply">
+		<span class="reply_text"><%= link_to_remote "(vastaa tähän ketjuun)", :update => "reply_text_#{comment.id}",
+			:url => {:controller => "comment", :action => "new_comment_form", :reply_to_id => reply_id } %></span>
+	</div>
+<% end %>

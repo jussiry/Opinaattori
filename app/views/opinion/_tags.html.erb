@@ -1,0 +1,25 @@
+
+<% tags = @opinion.cached_tags %>
+
+<h4 onclick="$('.tags_more', $(this).parent()).toggle('slow')">Tagit</h4>
+<div class="tags_more">
+	<% if tags.size > 0 %>
+		<% tags.each do |t| %>
+			<%= link_to t[0].name, {:controller => 'main_page', :action => 'opinions_by_tag',
+										:tag => t[0].name}, :html => {:title => t[1].to_s} %><%=',' unless t==tags[-1] %>
+		<% end %>
+	<% end %>
+	<% if session[:user] %>
+		<% link_name = tags.size > 0 ? "lisää uusi" : "Lisää tageja" %>
+		<span class="new_tags_link">(<%= link_to_function link_name, "var tags=$(this).parents('.tags');
+					$('.new_tags', tags).show();$('.new_tags_link', tags).hide();$('.tag_field', tags).select();" %>)</span>
+		<div class="new_tags" style="display:none">
+			<div><em>Erottele uudet tagit pilkulla (esim: henkilökohtainen, hauska):</em></div>
+			<% form_remote_tag :update => "tags_#{@opinion.id}",
+								:url => {:controller => 'opinion', :action => 'add_tag', :opinion_id => @opinion.id} do %>
+				<%= text_field_tag :tags, "", :class => 'tag_field', :style=>"float:left; width:80%; margin-right:3px" %>
+				<%= submit_tag 'Lähetä' %>
+			<% end %>
+		</div>
+	<% end %>
+</div>

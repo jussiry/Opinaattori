@@ -1,0 +1,17 @@
+<% if session[:user].nil? %>
+	<div id="login">
+		<% if params[:login_form] %>
+			<%= render(:partial => 'user/login') %>
+		<% else %>
+			<%= link_to_remote 'Kirjaudu sisään', :update => :login, :url => '/login_form' %>
+		<% end %>
+	</div>
+<% else %>
+	<h2><%= link_to session[:user].login_or_new, :controller => 'user', :action => 'show', :login => session[:user].login %></h2>
+	<div id="user_actions">
+		<%= link_to 'asetukset', { :controller => 'user', :action => 'settings', :login => session[:user].login } %>
+		<% if !session[:user].password.blank? and session[:user].has_login? %>
+			&nbsp;<%= link_to 'pois!', '/logout' %>
+		<% end %>
+	</div>
+<% end %>

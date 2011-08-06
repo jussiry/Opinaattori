@@ -1,0 +1,32 @@
+
+<% session[:actions] = [] if session[:actions].nil? %>
+					
+<!-- a = [act_status, op_id] 10 = comment -->
+<% session[:actions].reverse[0..2].each do |a| %>
+	<%
+		begin		
+			op = Opinion.find(a[1])
+		rescue
+			next #jos mielipide deletoitu
+		end
+		session[:read_com][op.id] = 0 if session[:read_com][op.id].nil?
+		diff = op.comments_count - session[:read_com][op.id]
+	%>
+	<a href="/opinion/show/<%=op.id%>" title="<%=op.text_no_html%>">
+		<% if a[0] == $agree %>
+			<img src='/images/answer_v_small.png' />
+		<% elsif a[0] == $disagree %>
+			<img src='/images/answer_x_small.png' />
+		<% elsif a[0] == $hidden %>
+			<img src='/images/x.png' />
+		<% elsif a[0] == $act_new_op %>
+			<img src='/images/new_opinion_icon.png' />
+		<% elsif a[0] == $act_comment %>
+			<img src='/images/comment_icon.png' />
+		<% end %>
+		<%=limit_text(op.text_no_html, 18)%>
+		<% if diff > 0 %>
+			<span style="font-weight:bold">(<%= diff %>)</span>
+		<% end %>
+	</a>
+<% end %>

@@ -1,0 +1,13 @@
+
+<% text = session[:opinions_text].blank? ? '&nbsp;' : session[:opinions_text] %>
+<div id="browse_current"><%= text %></div>
+
+<div id="opinions">
+	<%= render :partial => "opinion/opinion", :collection => session[:opinions][0..8] %>
+	<% session[:next_op] = 9 %>
+</div>
+<p id="loading_text" style="color:#AE7C46">ladataan lisää mielipiteitä...</p>
+
+<script type="text/javascript" charset="utf-8">
+	checkScroll() // endless page init
+</script>

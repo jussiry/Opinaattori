@@ -1,0 +1,17 @@
+<h4>Testing..</h4>
+<p>kcode: <%=$KCODE%> </p>
+
+<h4>Params:</h4>
+<p><%= params.inspect %></p>
+
+<h4>Request:</h4>
+<p><%= request.inspect %></p>
+
+<h4>Session:</h4>
+<p><%= session.inspect %></p>
+
+<h4>session[:opinions]:</h4>
+<p><%= session[:opinions].inspect unless session[:opinions].nil? %></p>
+
+<h4>Cache:</h4>
+<p><%= Rails.cache.inspect %></p>

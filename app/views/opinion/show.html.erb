@@ -1,0 +1,23 @@
+
+<%= render :partial => 'opinion', :locals => { :opinion => @opinion, :op_open => true, :show_always => true, } %>
+
+<% sim_ops = @opinion.similar_opinions[0..10] %>
+
+<% if sim_ops.size > 0 %>
+	<h3 style="margin: 30px 0 20px;">Samankaltaisia mielipiteitä:</h3>
+	<% rendered = [] %>
+	<% sim_ops.each do |sim| %>
+		<%
+		if session[:oses]
+		  opinion_status = session[:oses].select { |os| os.opinion_id == sim[0].id }[0]
+		else
+			opinion_status = nil
+		end
+		%>
+		<% if opinion_status.nil? %>
+			<%= render :partial => 'opinion', :locals => {:opinion => sim[0]} %>
+			<% rendered << sim[0].id %>
+			<% break if rendered.size == 20 %>
+		<% end %>
+	<% end %>
+<% end %>

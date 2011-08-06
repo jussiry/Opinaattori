@@ -1,0 +1,38 @@
+<% reply_id = false if !defined? reply_id or reply_id.nil? %>
+<% hide_form = (!reply_id and opinion.comments.size > 0) %>
+
+<% if hide_form %>
+	<div id="new_comment_link"><%= link_to_function "Uusi kommentti", "$('.new_comment', $(this).parents('.comments')).toggle('slow')" %></div>
+<% end %>
+
+<div class="new_comment <%='reply' if reply_id %>" <%= "style='display:none'" if hide_form %> >
+	<% form_remote_tag :update => "comments_#{opinion.id}",
+			:url => {:controller => 'comment', :action => 'create_new'} do %>
+		<!--div>Uusi kommentti:</div-->
+		<% if reply_id %>
+			<%= hidden_field :comment, :reply_id, :value => reply_id %>
+		<% end %>
+		<%= hidden_field :comment, :opinion_id, :value => opinion.id %>
+		<!-- filterin nimi vois myös olla 'url' :) -->
+		<%= text_field_tag :filter, nil, :style => "display: none" %>
+		<%= text_area :comment, :text, :onclick => "$('.anonym_comment', $(this).parent()).appear()", :class => "expanding" %>
+		<script type="text/javascript" charset="utf-8">
+			$('textarea.expanding').autogrow();
+		</script>
+		<% new_user = "$('#new_user').show();$('login_link').hide();" if session[:user].nil? %>
+		<%= submit_tag 'Lähetä', :onclick => new_user %>
+		<div class="anonym_comment">
+			<%= check_box :comment, :anonymous %>
+			anonyymi kommentti.
+		</div>
+	<% end %>
+	<div style="clear:both"></div>
+	<div style="margin:0.5em 0">
+		<div id="link_to_th_<%=reply_id%>" style="font-size:0.8em"><%= link_to_function 'Tekstin muotoilu', "$('.texting_help', $(this).parent().parent()).toggle('slow')" %></div>
+		<div class="texting_help" style="display:none;">
+			<div>[http://www.opinaattori.net Linkki] → <a href="http://www.opinaattori.net/">Linkki</a></div>
+			<div>*Lihavoitu* &nbsp;&nbsp;&nbsp; → &nbsp;&nbsp; <strong>Lihavoitu</strong></div>
+			<div>_Kursivoitu_ &nbsp;&nbsp; → &nbsp;&nbsp; <em>Kursivoitu</em></div>
+		</div>
+	</div>
+</div>

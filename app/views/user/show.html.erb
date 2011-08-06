@@ -1,0 +1,81 @@
+
+<h2 style="margin: 25px 0 10px 10px"><%= @user.login_or_new %></h2>
+
+<div id="user_box" class="round20">
+	
+	<!--div id="similarity" class="usr_inside_box">
+		<% if @similarity and @user != session[:user] %>
+			<br/><br/>
+			<h4 style="margin: 5px 0;" title="Maksimi: <%=@max_similarity%>%">Samanmielisyyteenne</h4>
+			<div id="similarity_percent" title="Maksimi: <%=@max_similarity%>%">
+				<%=@similarity%>%
+			</div>
+		<% end %>
+		&nbsp;
+	</div-->
+	
+	<div id="user_info" class="usr_inside_box">
+		<% if @user.picture_id.nil? %>
+			<img src="/images/dummy.jpg" />
+		<% else %>
+			<a href="/misc/picture/<%=@user.large_picture_id%>">
+				<img src="/misc/picture/<%=@user.picture_id%>" />
+			</a>
+		<% end %>
+		
+		<% unless @user.name.blank? %>
+			<div id="name"><%= @user.name %></div>
+		<% end %>
+		
+		<div>
+			<span><%= sex(@user.sex) unless @user.sex.nil?
+						%></span><%=", " if @user.sex and @user.birthdate
+			%><span><%= age(@user.birthdate) unless @user.birthdate.nil? %></span>
+		</div>
+		
+		<% unless @user.url.blank? %>
+			<div id="user_url"><%= link_to @user.url[7..-1], @user.url %></div>
+		<% end%>
+		
+		&nbsp;
+	</div>
+	
+	<div id="similar_users" class="usr_inside_box gray_links">
+		<% sim_users = @user.similar_users %>
+		<% you = [session[:user], @similarity, @max_similarity] %>
+		<% sim_users = sim_users + [you] unless session[:user].nil? or sim_users.include?(you) %>
+		<% unless sim_users[0][1] == 0 %>
+			<h3>Muita samanhenkisiä</h3>
+			<ul>
+				
+				<% sim_users.each do |su| %>
+					<% break if su[1] == 0 and su[0] != session[:user] %>
+					
+					
+					<li style="<%= 'font-weight:bold' if su[0] == session[:user] %>" title="maksimi arvo: <%=su[2]%>%">
+						<%
+							if su[0].small_picture_id.nil?
+								link = "<img src='/images/dummy_small.gif' />"
+							else
+								link = "<img src='/misc/picture/#{su[0].small_picture_id}' />"
+							end
+							link << " &nbsp;#{su[1]}%"
+							link << " - #{(su[0]==session[:user] and !su[0].has_login?) ? "sinä" : su[0].login}"
+							link << "<span class='tiny_text'>, #{sex(su[0].sex)[0..0].downcase}</span>" unless su[0].sex.nil?
+							link << "<span class='tiny_text'>, #{age(su[0].birthdate)}</span>" unless su[0].birthdate.nil?
+						%>
+						<%= link_to link, :controller => 'user', :action => 'show', :login => su[0].login %>
+					</li>
+				<% end %>
+				
+			</ul>
+		<% end %>
+	</div>
+	
+	<div style="clear: both;"></div>
+		
+</div>
+
+<div id="activity_log">
+	<%= render :partial => '/user/activity_log' %>
+</div>

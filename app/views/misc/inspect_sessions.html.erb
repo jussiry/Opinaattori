@@ -1,0 +1,25 @@
+
+<%#= @sessions[0].data.inspect %>
+
+<table>
+	<tr>
+		<th>id</th>
+		<th>login</th>
+		<th>oses</th>
+		<th>opinions</th>
+		<th>updated</th>
+		<th>testi</th>
+	</tr>
+	<% @sessions.each do |s| %>
+		<tr>
+			<td><%=s.id%></td>
+			<td><%=s.data[:user].login unless s.data[:user].nil? %></td>
+			<td><%=s.data[:oses].size unless s.data[:oses].nil? %></td>
+			<td><%=s.data[:opinions].size unless s.data[:opinions].nil? %></td>
+			<td><%=s.updated_at %></td>
+			<td><%=s.data[:testi].size unless s.data[:testi].nil? %></td>
+		</tr>
+	<% end %>
+</table>
+
+current session id: <%= session.session_id %>

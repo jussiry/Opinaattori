@@ -1,0 +1,19 @@
+<div id="extra">
+	<%= notice %>
+	
+	<!--  or session[:new_user] -->
+	<!-- <%='display:none' unless session[:new_user]%> -->
+	<% if session[:user].nil? %>
+		<div id='new_user' class='inset notice notice_green' style="display:none">
+      <%= link_to 'Uusi käyttäjä', {:controller => 'misc', :action => 'show_current_user'} %> luotu!<br/><br/>
+			(mikäli olet käyttänyt palvelua jo aiemmin voit liittää vastauksesi aiempaan profiiliisi loggautumalla
+			<%= link_to_remote 'tästä', :update => 'login', :url => '/login_form' %>)
+   	</div>
+		<!--% session[:new_user] = nil %-->
+	<% end %>
+	
+	<div id="login">
+		<%= render(:partial => 'user/login') if params[:login_form] %>
+	</div>
+	
+</div>
