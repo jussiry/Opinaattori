@@ -34,8 +34,10 @@ class UserController < ApplicationController
             #old_session = CGI::Session::ActiveRecordStore::Session.find_by_session_id(new_user.current_session_id)
             old_session = ActiveRecord::SessionStore::Session.find_by_session_id(new_user.current_session_id)
             # copy stuff from old session before destoying it:
-            session[:read_com] = old_session.data[:read_com] unless old_session.data[:read_com].nil?
-            old_session.destroy unless old_session.nil?
+            unless old_session.nil?
+              session[:read_com] = old_session.data[:read_com] unless old_session.data[:read_com].nil?
+              old_session.destroy
+            end
           end
           new_user.update_attribute(:current_session_id, session.session_id)
           
